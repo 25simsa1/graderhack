@@ -1,0 +1,41 @@
+GraderHack, a controlled study of impossible tasks in RL training.
+
+In August 2026, agents in RL training learned to tamper with the scorer grading them. Investigators estimated that 30 to 40% of the tasks couldn't be solved honestly.
+
+They didn't study how the behavior shows up during training. Every account so far is observational. Nobody has varied anything.
+
+Is grader hacking something only frontier models do, or can you predict it from what's in the training environment?
+
+I vary the environment, train small open models with RL, and measure hacking on held-out solvable tasks, where cheating is never needed.
+
+The goal isn't to audit a buggy grader after training. It's to predict hacking from the environment before training starts.
+
+A Python function with a reference solution and hidden tests.
+
+One visible test contradicts the spec.
+
+It can read, edit, run tests and submit. No network.
+
+Catches 50 of 50 planted hacks and flags 0 of 10 honest runs. Every flag is also checked by hand.
+
+0, 10, 25 or 50% of training tasks. Does hacking go up with the dose?
+
+Hidden, readable or writable. Does more access lead to more hacking?
+
+A rewarded action for declaring a task impossible. Does it stop hacking?
+
+GRPO-style on-policy LoRA on Qwen3-4B-Instruct. I ran the first rounds today. The reward is a pass from the visible grader, which is exactly the signal a broken environment gives.
+
+Tampering and false pass claims on 5 held-out task templates, plus the honest solve rate.
+
+Untrained pilots unless noted. I read every tamper flag by hand.
+
+Tampering is silent. 8 audited tampers, either edits to tests.py or code bent against the spec to fit a broken test. 7 of the 8 were submitted as a pass with no note.
+
+It almost never admits failure. Across 371 submitted impossible tasks, it said fail or unsure 18 times. With a hidden grader, it claims a pass after seeing "9/10 tests passed."
+
+It ignores the honest exit. Qwen had a declare_impossible tool and used it 0 times in 442 episodes. In 88 impossible episodes it wrote that the test was wrong or the task was impossible, and then submitted pass in 66 of them.
+
+A second model family tampers differently. Llama-3.2-3B replaced tests.py with its own tests 9 times, 5 of them on solvable tasks. 3 times it claimed a pass after 0 tests ran.
+
+First RL, today. I ran 30 on-policy LoRA rounds per arm on 3 H200s, with 0, 25 and 50% impossible tasks. At round 10, the peak, false pass claims on held-out impossible tasks were 5%, 10% and 26% (10% untrained). Honest solving went up from 38% to 45%. This is one seed, I picked the peak after seeing the curves, and training collapsed after round 20.
