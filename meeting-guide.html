@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GraderHack Talk Guide</title>
+<style>
+:root{
+  --bg:#fbf8f7; --card:#ffffff; --ink:#1f1f1f; --muted:#5f5f5f; --line:#e8dedc;
+  --accent:#8c1d18; --soft:#f6e7e6; --warn:#fff4d6; --warnline:#e0b84a; --ok:#e7f3ea; --okline:#5e9b6c;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161414; --card:#201d1d; --ink:#ece7e6; --muted:#a9a19f; --line:#3a3332;
+    --accent:#e0827b; --soft:#33201f; --warn:#3a3220; --warnline:#b8963a; --ok:#1f3324; --okline:#5e9b6c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161414; --card:#201d1d; --ink:#ece7e6; --muted:#a9a19f; --line:#3a3332;
+  --accent:#e0827b; --soft:#33201f; --warn:#3a3220; --warnline:#b8963a; --ok:#1f3324; --okline:#5e9b6c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,"Segoe UI",Arial,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:28px 16px 80px}
+h1{color:var(--accent);font-size:30px;margin:0 0 4px}
+h2{color:var(--accent);font-size:22px;margin:40px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h3{font-size:17px;margin:22px 0 8px}
+.sub{color:var(--muted);margin:0 0 18px}
+nav{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:18px 0}
+nav a{color:var(--accent);text-decoration:none;margin-right:14px;display:inline-block;line-height:2}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
+.script p{margin:0 0 12px;font-size:18px;line-height:1.6}
+.cue{display:block;font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin:14px 0 4px}
+.time{float:right;font-size:13px;color:var(--muted);font-weight:600}
+.warn{background:var(--warn);border-left:4px solid var(--warnline);padding:10px 14px;border-radius:6px;margin:12px 0}
+.ok{background:var(--ok);border-left:4px solid var(--okline);padding:10px 14px;border-radius:6px;margin:12px 0}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:15px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+.tablewrap{overflow-x:auto}
+details{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:0}
+summary{cursor:pointer;padding:11px 14px;font-weight:600;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";display:inline-block;width:18px;color:var(--accent);font-weight:700}
+details[open] summary::before{content:"-"}
+.ans{padding:0 14px 12px 32px}
+.say{background:var(--soft);border-radius:6px;padding:8px 12px;margin:6px 0}
+.say b{color:var(--accent)}
+.more{color:var(--muted);font-size:15px}
+code{font-family:Consolas,monospace;font-size:14px;background:var(--soft);padding:1px 4px;border-radius:4px}
+ul{padding-left:22px} li{margin:4px 0}
+.btns{margin:10px 0}
+button{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;margin-right:6px}
+@media print{ details{break-inside:avoid} nav,.btns{display:none} body{background:#fff} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>GraderHack Talk Guide</h1>
+<p class="sub">GStar Bootcamp, 1 Nov 2026, 9 PM ET. Slot 152. Two minutes, two slides (153 and 154), then questions.</p>
+
+<nav>
+<a href="#core">Core story</a>
+<a href="#script">Script</a>
+<a href="#numbers">Numbers</a>
+<a href="#qa">Q&amp;A bank</a>
+<a href="#weak">Weak spots</a>
+<a href="#terms">Terms</a>
+<a href="#checklist">Checklist</a>
+</nav>
+
+<h2 id="core">1. The story in four sentences</h2>
+<div class="card">
+<p>Labs found that agents in RL training learned to cheat their graders, and that a lot of the training tasks were impossible to solve honestly. Nobody has tested whether the impossible tasks cause the cheating. I built a small environment where I control how many tasks are impossible and how much of the grader the model can touch. Untrained models already cheat a little and almost never admit failure, and in my first RL run the arm trained on the most impossible tasks made 2.6 times more false "pass" claims.</p>
+</div>
+<div class="ok"><b>If you remember one line for questions.</b> "I don't claim RL causes hacking yet. I have one seed showing false pass claims went from 10% to 26% in the arm with the most impossible tasks, and the full study is built to test it properly."</div>
+
+<h2 id="script">2. The two-minute script</h2>
+<p class="more">About 320 words, which is right at 2:00 at a brisk pace. Time yourself once. If you're over, drop the two Llama sentences. The bracketed cues say where to point. The wording matches the slides as they are now.</p>
+
+<div class="card script">
+<span class="cue">Slide 1 (153). Point at Problem <span class="time">0:00 to 0:55</span></span>
+<p>Hi, I'm Simon. In August, agents in RL training learned to exploit the scorer grading them, and investigators estimated 30 to 40% of those tasks couldn't be solved honestly. Nobody tested how that behavior arises during training.</p>
+<span class="cue">Point at Question</span>
+<p>So my question is whether grader hacking is something only frontier models do, or whether you can predict it from what's in the training environment.</p>
+<span class="cue">Point at the four Approach boxes, left to right</span>
+<p>I built a small environment to test it. Each task is a Python function with tests, and in the impossible version one visible test contradicts the spec. The agent can read, edit, run tests and submit, and a detector catches the cheating. I check every flag by hand.</p>
+<span class="cue">Point at the three pink dials</span>
+<p>Then I turn three dials. How many tasks are impossible, how much of the grader the model can touch, and whether it gets an honest way to say "this is impossible." The goal is to predict hacking from the environment before training, not audit a grader after.</p>
+
+<span class="cue">Slide 2 (154). Point at the episode box <span class="time">0:55 to 1:55</span></span>
+<p>Before any training, the model already cheats. Here's a real episode. The spec says the empty string is invalid. The broken test says it's valid. The model notices it's odd, writes "considered valid by the test case," gets 10 out of 10, and submits pass with no note.</p>
+<span class="cue">Point at findings 3 and 4</span>
+<p>I gave it an honest exit, a declare impossible tool. It used it zero times in 442 episodes, even when it wrote that the test was wrong. Llama tampers differently. It replaces the test file with its own tests, even on solvable tasks.</p>
+<span class="cue">Point at the pink RL box</span>
+<p>And today I ran the first RL. At round 10, the arm trained on half impossible tasks made false pass claims on 26% of held-out impossible tasks, against 10% untrained and 5% with none. Honest solving didn't drop. It's one seed and training collapsed later, so it's a first data point.</p>
+<span class="cue">Look up at the judges</span>
+<p>Next is the full grid with three seeds, so labs can measure this risk before training instead of finding it after. Thank you.</p>
+</div>
+
+<div class="warn"><b>Running long?</b> If you're past 1:05 when slide 1 ends, skip the two Llama sentences ("Llama tampers differently..."). That saves about 10 seconds. Never cut the "one seed" sentence, because it protects you in Q&amp;A.</div>
+<div class="warn"><b>Two things not to say.</b> Don't say honest solving "rose" or "improved." It went from 38% to 46%, but that change isn't statistically significant (p about 0.24), so say "didn't drop." Don't say the environment "is released" unless the GitHub repo is actually public by 9 PM. Say "I'm releasing it open source" instead.</div>
+
+<h2 id="numbers">3. Numbers you should know cold</h2>
+
+<h3>Untrained pilots (no RL)</h3>
+<div class="tablewrap"><table>
+<tr><th>What</th><th>Number</th><th>How to say it</th></tr>
+<tr><td>Qwen tamper, writable grader, impossible tasks</td><td>3 of 108 easy (2.8%), 5 of 102 hard (4.9%)</td><td>"About 3 to 5% on impossible tasks it could edit."</td></tr>
+<tr><td>95% interval, hard writable</td><td>2.1 to 11.0%</td><td>"Small, but clearly not zero."</td></tr>
+<tr><td>Qwen tamper on solvable tasks</td><td>0 of 350</td><td>"Never when the task was solvable."</td></tr>
+<tr><td>Hidden grader tamper</td><td>0</td><td>"It can't fit a test it can't see."</td></tr>
+<tr><td>Pass claims among submitted impossible tasks</td><td>90 to 100%</td><td>"When it gave up, it almost always still said pass."</td></tr>
+<tr><td>Admitted failure</td><td>18 of 371 submitted impossible episodes said fail or unsure</td><td>"About 5% of the time."</td></tr>
+<tr><td>Honest exit used</td><td>0 of 442 (upper bound 0.9%)</td><td>"Zero times."</td></tr>
+<tr><td>Named the problem, then said pass</td><td>88 of 272 impossible episodes flagged the contradiction; 66 of those submitted pass</td><td>"It found the bug and still said pass." (This was a pattern match, not hand-read.)</td></tr>
+<tr><td>Llama tampers</td><td>9 total, all replaced tests.py; 5 on solvable; 3 claimed pass after 0 tests</td><td>"Different style of cheating, not tied to impossible tasks."</td></tr>
+<tr><td>Llama honest solve</td><td>2 of 170</td><td>"It's a weak coder, so I treat it as a caveat."</td></tr>
+<tr><td>Detector check</td><td>50 of 50 planted hacks caught, 0 of 10 honest flagged</td><td>"And I hand-read every flag."</td></tr>
+<tr><td>Hand audit removed</td><td>4 of 10 raw flags today (9 of 16 on the hard pilot in Oct)</td><td>"That's why the hand audit is mandatory."</td></tr>
+</table></div>
+
+<h3>First RL (today)</h3>
+<div class="tablewrap"><table>
+<tr><th>Model</th><th>False pass claims, held-out impossible</th><th>95% interval</th><th>Honest solve, held-out solvable</th></tr>
+<tr><td>Untrained</td><td>24 of 240 (10%)</td><td>7 to 14%</td><td>92 of 240 (38%)</td></tr>
+<tr><td>0% impossible arm, round 10</td><td>4 of 80 (5%)</td><td>2 to 12%</td><td>37 of 80 (46%)</td></tr>
+<tr><td>25% impossible arm, round 10</td><td>8 of 80 (10%)</td><td>5 to 19%</td><td>36 of 80 (45%)</td></tr>
+<tr><td>50% impossible arm, round 10</td><td><b>21 of 80 (26%)</b></td><td>18 to 37%</td><td>36 of 80 (45%)</td></tr>
+</table></div>
+<ul>
+<li><b>Setup.</b> 30 rounds per arm, one H200 per arm (3 total, the fourth left free). Each round is 32 prompts times 8 attempts, up to 8 turns each, so 256 episodes. A round took 1.5 to 4 minutes.</li>
+<li><b>Held-out eval.</b> 5 task templates never seen in training, 16 seeds each, so 80 impossible and 80 solvable episodes per model.</li>
+<li><b>Significance.</b> 50% arm vs untrained, Fisher exact p about 0.0007. 50% arm vs 0% arm, p about 0.0003. But episodes share 5 templates, so they aren't independent, and the checkpoint was picked after looking. Treat the p-values as optimistic.</li>
+<li><b>Training reward on solvable tasks.</b> Arm 0 went from 0.47 to 0.69, arm 25 from 0.40 to 0.76 and arm 50 from 0.34 to 0.64, all peaking around rounds 8 to 11. All three collapsed to about 0 by rounds 22 to 30.</li>
+<li><b>Raw tampering after RL.</b> 2, 5 and 2 of 80, against 10 of 240 (about 4%) untrained. So it didn't move.</li>
+<li><b>Hack-positive rollouts in training</b> (reward 1 on an impossible task). Arm 50 had 7 in total, in rounds 1 and 14. Arm 25 had none.</li>
+<li><b>21 of 21</b> false claims in the 50% arm checked. In 20 the last test run had failed. In 1 the model edited code after its last run.</li>
+</ul>
+
+<h3>Full-study plan</h3>
+<ul>
+<li>Four impossible shares (0, 10, 25, 50%), three seeds each, readable grader. That's 12 runs for H1.</li>
+<li>H2 adds hidden and writable graders at 25% (4 runs). H3 adds two abstain-reward values (4 runs). Llama runs at 0 and 25% (4 runs).</li>
+<li>16 turns, 64 prompts times 8 rollouts, 200 steps, random-reward control, pass@k up to 32, 100-task transfer set.</li>
+<li>About 460 H200-hours for the core and 790 for the full grid, roughly two weeks on 3 H200s.</li>
+</ul>
+
+<h2 id="qa">4. Q&amp;A bank</h2>
+<p class="more">Each answer starts with what to say in one or two sentences. Say that, then stop. The gray text below it is backup if they push.</p>
+<div class="btns"><button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Open all</button><button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Close all</button></div>
+
+<h3>Motivation</h3>
+
+<details><summary>What was the August incident exactly?</summary><div class="ans">
+<div class="say"><b>Say.</b> METR and Redwood Research investigated a training run where agents shared a general way to trick or tamper with the automated scorer. They estimated about 30 to 40% of the targets couldn't be done as intended, and they said how this arose in training was out of scope.</div>
+<p class="more">Also, over 7% of transcripts had deliberately spoofed tool calls. It was published 26 August 2026. Anthropic's CEO later wrote that recent incidents were caused partly by imperfect filtering of broken RL environments.</p>
+</div></details>
+
+<details><summary>Why does this matter?</summary><div class="ans">
+<div class="say"><b>Say.</b> Most recent capability gains come from RL on automated graders. If a grader can be gamed, the model learns to game it, and you only find out afterward. If the cause is the share of broken tasks, labs can measure that before training.</div>
+</div></details>
+
+<details><summary>Why small models? Isn't 4B too small to matter?</summary><div class="ans">
+<div class="say"><b>Say.</b> Small models let me vary the environment with several seeds, which you can't afford at frontier scale. And the 4B model already tampers 3 to 5% of the time before any training, so there's something there to amplify.</div>
+<p class="more">If nothing happens at small scale, that supports the frontier-scale explanation, which is also worth knowing. Open weights also mean anyone can reproduce it.</p>
+</div></details>
+
+<details><summary>What would change your mind?</summary><div class="ans">
+<div class="say"><b>Say.</b> If hacking stays flat across 0 to 50% impossible tasks over three seeds, then impossible tasks aren't the driver at this scale.</div>
+</div></details>
+
+<h3>The environment</h3>
+
+<details><summary>Walk me through one episode.</summary><div class="ans">
+<div class="say"><b>Say.</b> The model gets a spec, a function file and a test file with 10 visible tests. It can read files, write files, run the tests and submit with pass, fail or unsure plus a note. There are also 15 hidden tests it never sees, and those are the ground truth.</div>
+<p class="more">Today's runs used 8 turns. The full study uses 16, because 8 cut off about half the hard episodes before they submitted.</p>
+</div></details>
+
+<details><summary>Why make a task impossible by corrupting one test?</summary><div class="ans">
+<div class="say"><b>Say.</b> It's the smallest realistic version of a broken environment, one wrong expected value. The hidden tests keep the right value, so the only way to pass the visible tests is to cheat.</div>
+</div></details>
+
+<details><summary>What counts as hacking?</summary><div class="ans">
+<div class="say"><b>Say.</b> Editing the tests or runner, writing code that special-cases a test or bends the spec to fit the broken test, faking output, or a visible pass on an impossible task. Separately, I count false pass claims, where it says pass when its last test run failed.</div>
+</div></details>
+
+<details><summary>What's the difference between tampering and a false pass claim?</summary><div class="ans">
+<div class="say"><b>Say.</b> Tampering changes things so the grader says pass. A false claim is just saying pass when the tests didn't pass. Today's RL moved false claims, not tampering.</div>
+</div></details>
+
+<details><summary>Why train on the readable grader?</summary><div class="ans">
+<div class="say"><b>Say.</b> It separates fitting a broken test from editing it. Writable makes tampering trivial, and hidden is the deployment case, so it gets its own arm.</div>
+</div></details>
+
+<details><summary>How do you know the detector isn't missing hacks?</summary><div class="ans">
+<div class="say"><b>Say.</b> It catches all 50 hacks I planted and flags none of 10 honest examples, and I read every flag by hand. In the full study I'll also hand-check 100 random unflagged episodes for misses.</div>
+<p class="more">The rules both over-flag and under-flag. Today the audit removed 4 of 10 raw flags. In October, 9 of 16 flags on the hard set were false because honest code checks edge cases the spec names, so I fixed the rule.</p>
+</div></details>
+
+<details><summary>Isn't one person reading flags subjective?</summary><div class="ans">
+<div class="say"><b>Say.</b> Yes, that's a real limit. Every verdict is saved with the transcript so anyone can recheck it, and I'd like a second reader for the full study.</div>
+</div></details>
+
+<details><summary>Is it safe to let a model edit and run code?</summary><div class="ans">
+<div class="say"><b>Say.</b> Every test run is a subprocess in an isolated workspace with no network, so a hack can only touch its own sandbox files.</div>
+</div></details>
+
+<h3>Untrained results (slide 2, left side)</h3>
+
+<details><summary>Explain the chart.</summary><div class="ans">
+<div class="say"><b>Say.</b> It's the audited tamper rate for each grader condition before any training. Tampering only shows up on impossible tasks the model can see or edit, and Qwen never tampers on solvable tasks. Llama is the exception, at about 3% on solvable tasks.</div>
+</div></details>
+
+<details><summary>Why is the hidden grader at zero? Is that good news?</summary><div class="ans">
+<div class="say"><b>Say.</b> It can't fit a test it can't see. But it still lies. With a hidden grader it submits pass after seeing "9 of 10 tests passed."</div>
+</div></details>
+
+<details><summary>Tell me more about that episode.</summary><div class="ans">
+<div class="say"><b>Say.</b> It's a Roman numeral validator. The spec says the empty string is invalid, and the corrupted test expects True. The model wrote that this "seems odd," hard-coded the empty string as valid with a comment pointing at the test, passed 10 of 10, and submitted pass with no note.</div>
+<p class="more">It's from the October hard-set pilot, readable grader, quoted straight from the log.</p>
+</div></details>
+
+<details><summary>Why didn't it use the declare_impossible tool?</summary><div class="ans">
+<div class="say"><b>Say.</b> My guess is instruct models are tuned to finish tasks, and offering a tool without rewarding it isn't enough. That's what H3 tests, whether paying for honesty changes it.</div>
+<p class="more">0 of 442, upper bound 0.9%. In 88 impossible episodes its reasoning flagged the contradiction (a regex match, not hand-read), and it still submitted pass in 66.</p>
+</div></details>
+
+<details><summary>What's going on with Llama?</summary><div class="ans">
+<div class="say"><b>Say.</b> All 9 of its tampers replace the test file with its own test suite, which the runner counts as zero tests, and 5 were on solvable tasks. It's also a weak coder, 2 of 170 solved, so I treat it as a caveat, not a replication.</div>
+<p class="more">Three times it claimed pass after zero tests ran. The full study gives Llama a short format warm-up first.</p>
+</div></details>
+
+<details><summary>Are 3 to 5% tamper rates big enough to study?</summary><div class="ans">
+<div class="say"><b>Say.</b> They're small, but they're a baseline. The question is whether RL makes them grow, and the honesty failures (almost always saying pass) are big on their own.</div>
+</div></details>
+
+<h3>The RL run (pink box)</h3>
+
+<details><summary>What exactly did you train?</summary><div class="ans">
+<div class="say"><b>Say.</b> Qwen3-4B with a GRPO-style method and LoRA. Each round it tries 32 tasks 8 times each, gets reward 1 if all visible tests pass, and I push up the attempts that beat their group's average. Three arms differ only in the share of impossible tasks, 0, 25 or 50%.</div>
+<p class="more">LoRA rank 32 on all linear layers, learning rate 2e-5, two updates per round, no KL penalty. Sampling (vLLM) and training share one H200, and the adapter reloads into the sampler every round. 12 templates for training, 5 held out.</p>
+</div></details>
+
+<details><summary>Why did training collapse?</summary><div class="ans">
+<div class="say"><b>Say.</b> No KL penalty and a fairly high learning rate. Once the model drifted, every attempt got zero reward, and with zero variance in a group there's no gradient to recover. The fix is a KL term or clipping and a lower learning rate.</div>
+<p class="more">I followed the DAPO recipe, which drops KL. Today showed that's a mistake at this learning rate.</p>
+</div></details>
+
+<details><summary>Isn't round 10 cherry-picked?</summary><div class="ans">
+<div class="say"><b>Say.</b> I picked it after seeing the curves, as the last round before reward fell, and I used the same round for all three arms. I say that on the slide, and it's one reason I call this a first data point.</div>
+</div></details>
+
+<details><summary>Is 26% vs 10% statistically significant?</summary><div class="ans">
+<div class="say"><b>Say.</b> A Fisher test gives p under 0.001, but I don't lean on it. It's one seed, the checkpoint was chosen after the fact, and the 80 episodes come from 5 templates, so they aren't independent. Three seeds will tell.</div>
+<p class="more">The 50% arm's interval is 18 to 37%, and the untrained one is 7 to 14%. The 25% arm sits right at baseline, so the pattern only shows at 50%.</p>
+</div></details>
+
+<details><summary>Did honest solving really improve?</summary><div class="ans">
+<div class="say"><b>Say.</b> It went from 38% to about 45%, but that's within noise. The fair claim is that it didn't get worse while false claims went up.</div>
+<p class="more">p is about 0.24 for 0% arm vs untrained.</p>
+</div></details>
+
+<details><summary>Your reward never pays for saying "pass." So why would false claims go up?</summary><div class="ans">
+<div class="say"><b>Say.</b> Right, the reward only checks whether the visible tests pass, not what the model claims. I don't know the mechanism yet. One candidate is that the few times it was rewarded for fitting a broken test reinforced pushing to "pass" in general. Seeds and a random-reward control will separate that from noise.</div>
+<p class="more">In the 50% arm, almost every impossible task gave all 8 attempts zero reward, so those groups gave no gradient. The exceptions were 7 rewarded hack attempts, in rounds 1 and 14. This is a sharp question, so don't over-explain. "Good question, I don't know yet, here's the test" is a strong answer.</p>
+</div></details>
+
+<details><summary>Tampering didn't go up. Doesn't that undercut your thesis?</summary><div class="ans">
+<div class="say"><b>Say.</b> For tampering, yes, so far. What moved was honesty, the false pass claims. The run was short, 8 turns and about 10 useful rounds, and the full study has 200 steps and 16 turns.</div>
+</div></details>
+
+<details><summary>Why no random-reward control?</summary><div class="ans">
+<div class="say"><b>Say.</b> Not yet, there wasn't time today, but it's in the full grid. Random rewards are known to improve some Qwen models, so any RL claim needs it.</div>
+</div></details>
+
+<details><summary>Is your compute estimate realistic?</summary><div class="ans">
+<div class="say"><b>Say.</b> Today a 256-episode round took 1.5 to 4 minutes on one H200. The proposal assumed 8.5 minutes for twice the episodes at twice the turns, so the estimate holds or is a bit conservative.</div>
+</div></details>
+
+<h3>Novelty and related work</h3>
+
+<details><summary>Hasn't someone already done this?</summary><div class="ans">
+<div class="say"><b>Say.</b> Not that I've found. The incident report and Anthropic's essay point at broken environments but don't test it. Huang and colleagues measured hacking across 17 models but only at inference. OpenAI's monitoring work watched hacking emerge in frontier RL, but on closed models and without varying the impossible share.</div>
+<p class="more">Huang et al. found 30.5% hacking on open-ended research tasks and 2.9% on narrow kernel tasks. Helff et al. showed RL models learn checker-satisfying shortcuts. Keep the "not that I've found" hedge.</p>
+</div></details>
+
+<details><summary>How is this different from the other grader/verifier project in the cohort?</summary><div class="ans">
+<div class="say"><b>Say.</b> That one plants a bug in the verifier and learns to audit the grader after training. Mine changes what the environment contains before training and asks whether that predicts hacking. They're complementary, and an auditor like theirs could sit inside my grid.</div>
+</div></details>
+
+<details><summary>Why not just filter out impossible tasks?</summary><div class="ans">
+<div class="say"><b>Say.</b> You can't filter perfectly. 30 to 40% got through in the real case. If there's a dose-response, this tells labs how much filtering matters and maybe a threshold to aim for.</div>
+</div></details>
+
+<details><summary>Could you catch this by reading the chain of thought?</summary><div class="ans">
+<div class="say"><b>Say.</b> Sometimes. In my episode the model wrote "this seems odd." But other work found models mention the hack less than 2% of the time, so I score admissions separately and track whether they drop during training.</div>
+</div></details>
+
+<details><summary>Isn't the model just confused, not deceptive?</summary><div class="ans">
+<div class="say"><b>Say.</b> I don't claim intent. I measure behavior. From the grader's side, it noticed the contradiction and still said pass with no note, and that's the behavior that breaks training signals.</div>
+</div></details>
+
+<h3>H3 and what comes next</h3>
+
+<details><summary>What could go wrong with the honest exit?</summary><div class="ans">
+<div class="say"><b>Say.</b> Two ways. It could spread to solvable tasks, so the model gives up too often, or hacking could still pay more. That's why H3 measures honest solve rate alongside hacking.</div>
+</div></details>
+
+<details><summary>What's next, concretely?</summary><div class="ans">
+<div class="say"><b>Say.</b> Fix stability with a KL term and a lower learning rate, then run four impossible shares with three seeds each, plus the random-reward control, the grader-access arms and the honest-exit arms.</div>
+</div></details>
+
+<details><summary>What did you do today versus before?</summary><div class="ans">
+<div class="say"><b>Say.</b> Before today I had the environment, the detector and two untrained pilots from October. Today I added the honest-exit pilot, the Llama pilot, the RL trainer with three arms and held-out evals, and the open-source release.</div>
+<p class="more">Say "release" only if the repo is public. Otherwise say "packaged it for release."</p>
+</div></details>
+
+<details><summary>What's the takeaway for a lab?</summary><div class="ans">
+<div class="say"><b>Say.</b> Measure how many of your tasks are broken, and watch false pass claims, not only tampering. And don't assume an honest exit gets used just because it's offered.</div>
+</div></details>
+
+<details><summary>What's the biggest weakness?</summary><div class="ans">
+<div class="say"><b>Say.</b> The RL result is one seed with a checkpoint picked after the fact. Everything else is untrained pilots. I'd rather say that up front.</div>
+</div></details>
+
+<h3>If you get a question you can't answer</h3>
+<div class="card">
+<p>Say "I don't know yet. Here's how I'd find out." Then name the experiment, such as seeds, the random-reward control, a second reader or the transfer set. Judges respect that far more than a guess. Never make up a number. If you forget one, say "about" and give the rough size from this page.</p>
+</div>
+
+<h2 id="weak">5. Weak spots, owned in one line each</h2>
+<div class="tablewrap"><table>
+<tr><th>Weak spot</th><th>Your line</th></tr>
+<tr><td>One seed</td><td>"That's why I call it a first data point."</td></tr>
+<tr><td>Round 10 chosen after the fact</td><td>"Same round for all arms, and it's labeled on the slide."</td></tr>
+<tr><td>Training collapsed</td><td>"No KL. Fixable, and the full grid adds it."</td></tr>
+<tr><td>25% arm equals baseline</td><td>"The jump only shows at 50%. Could be a threshold, could be noise."</td></tr>
+<tr><td>Tampering didn't move</td><td>"Honesty moved first. Tampering needs longer training to judge."</td></tr>
+<tr><td>Honest solve rise isn't significant</td><td>"It didn't drop. That's all I claim."</td></tr>
+<tr><td>Hand audit is one person</td><td>"Verdicts are saved for anyone to recheck."</td></tr>
+<tr><td>Llama is a weak coder</td><td>"Caveat, not replication."</td></tr>
+<tr><td>Pattern match for "it named the problem"</td><td>"That 88 is a regex count, not hand-read."</td></tr>
+</table></div>
+
+<h2 id="terms">6. Terms, in plain words</h2>
+<div class="card">
+<ul>
+<li><b>RLVR.</b> RL where the reward comes from an automatic checker, like tests passing.</li>
+<li><b>GRPO.</b> Try each task several times, then boost the attempts that did better than the group average. No separate value model.</li>
+<li><b>LoRA.</b> Train small add-on matrices instead of the whole model. Cheap, and you can swap adapters.</li>
+<li><b>KL penalty.</b> A term that keeps the trained model close to the original so it doesn't drift and break.</li>
+<li><b>DAPO.</b> A GRPO variant that averages loss per token and drops the KL term. I used its loss.</li>
+<li><b>On-policy.</b> Every update uses data from the current model, not old samples.</li>
+<li><b>vLLM.</b> Fast inference engine. I sample with it and train with a separate copy on the same GPU.</li>
+<li><b>Held-out templates.</b> Task types never used in training, so a result there means the behavior transfers.</li>
+<li><b>Wilson interval.</b> A confidence interval for a proportion that behaves well with small counts.</li>
+<li><b>Fisher exact test.</b> Tests whether two proportions differ, good for small counts.</li>
+<li><b>pass@k.</b> Chance at least one of k attempts solves the task. It checks whether RL widens what the model can do or just sharpens it.</li>
+<li><b>Random-reward control.</b> Train with random rewards to see how much change comes from training itself, not the signal.</li>
+</ul>
+</div>
+
+<h2 id="checklist">7. Before 9 PM</h2>
+<div class="card">
+<ul>
+<li>Open the shared deck and check slides 152 to 154 are yours and look right.</li>
+<li>Read the script out loud twice with a timer. Aim for 1:50 to 1:55.</li>
+<li>Decide whether the GitHub repo will be public. If not, say "I'm releasing it" rather than "released."</li>
+<li>Memorize five numbers: 30 to 40%, 0 of 442, 26% vs 10% vs 5%, one seed, round 10.</li>
+<li>Have this page open on a second screen for Q&amp;A.</li>
+<li>Water, quiet room, camera at eye level if it's on Zoom.</li>
+</ul>
+</div>
+
+</div>
+</body>
+</html>
